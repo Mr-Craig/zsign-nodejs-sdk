@@ -13,7 +13,7 @@ class OAuth {
         this.client_id = this.getResponseValueFromKey(arr, 'CLIENT_ID');
         this.client_secret = this.getResponseValueFromKey(arr, 'CLIENT_SECRET');
         this.DC = this.getResponseValueFromKey(arr, 'DC');
-        this.access_token = this.getResponseValueFromKey(arr, 'ACCESS_TOKEN');
+        this.access_token = undefined;
         this.refresh_token = this.getResponseValueFromKey(arr, 'REFRESH_TOKEN');
     }
 
@@ -25,12 +25,11 @@ class OAuth {
         return 'https://sign.zoho.' + this.DC.toLowerCase();
     }
 
-    getAccessToken() {
-        return this.access_token;
-    }
-
-    setAccessToken(access_token) {
-        this.access_token = access_token;
+    async getAccessToken() {
+        if(this.access_token === undefined || this.access_token.expires_in < new Date().getTime()) {
+            await this.generateAccessTokenUsingRefreshToken();
+        }
+        return this.access_token.access_token;
     }
 
     getRefreshToken() {
@@ -83,16 +82,20 @@ class OAuth {
             client_secret: this.client_secret,
             grant_type: 'refresh_token'
         };
+
         //Fetch api
         return fetch('https://accounts.zoho.' + this.DC + '/oauth/v2/token?' + new URLSearchParams(params), {
-            method: 'POST'
+            method: 'POST',
+            cache: 'no-store'
         })
             .then((resp) => resp.json())
             .then((res) => {
                 if (res['error'] != undefined) {
                     throw new SignException(res['error']);
                 }
-                this.access_token = res.access_token;
+                this.access_token = res;
+                this.access_token.expires_in = new Date().getTime() + (this.access_token.expires_in * 1000);
+
                 return res.access_token;
             })
             .catch((err) => {

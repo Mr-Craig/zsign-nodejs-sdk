@@ -1,0 +1,39 @@
+export class RequestListObject {
+    constructor(response: any);
+    getResponseValueFromKey(json: any, key: any): any;
+    document_ids: any[];
+    ishost: any;
+    request_status: any;
+    notes: any;
+    action_type: any;
+    sign_id: any;
+    private_notes: any;
+    my_status: any;
+    my_request_id: any;
+    requester_email: any;
+    request_name: any;
+    requested_time: any;
+    action_time: any;
+    request_type_name: any;
+    org_name: any;
+    expire_by: any;
+    requester_name: any;
+    getRequestId(): any;
+    getIsHost(): any;
+    getRequestStatus(): any;
+    getDocumentIds(): any[];
+    getNotes(): any;
+    getActionType(): any;
+    getSignId(): any;
+    getPrivateNotes(): any;
+    getMyStatus(): any;
+    getRequesterEmail(): any;
+    getRequestName(): any;
+    getRequestTime(): any;
+    getActionTime(): any;
+    getRequestTypeName(): any;
+    getOrgName(): any;
+    getExpireBy(): any;
+    getRequesterName(): any;
+}
+//# sourceMappingURL=RequestListObject.d.ts.map

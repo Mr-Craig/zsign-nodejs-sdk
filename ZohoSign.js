@@ -68,23 +68,20 @@ class ZohoSign{
 			let payload = new FormData();
 			let flag=true;
 			files.forEach(file => {
-				if(typeof(file)=="string")
-				{
-					if(fs.existsSync(file)) 
-					{
-						let value=fs.createReadStream(file);
-						payload.append('file',value);
-					}
-					else
-					{
-						flag=false;
-						return;
-					}
+				if(file.filename === undefined || file.contentType === undefined || file.knownLength === undefined || file.buffer === undefined) {
+					flag = false;
+					return;
 				}
+
+				payload.append("file", file.buffer, {
+					filename: file.filename,
+					contentType: file.contentType,
+					knownLength: file.knownLength
+				});
 			});  
 			if(flag==false)
 			{
-				throw new SignException("Invalid Directory");
+				throw new SignException("Invalid Files");
 			}
 			payload.append('data',JSON.stringify(data));
 			let resp = await ApiClient.callSignAPI( currentUser,"/api/v1/requests", 'POST', null, payload,null,true,false )

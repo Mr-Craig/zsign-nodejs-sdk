@@ -1,5 +1,4 @@
-const fetch = require('node-fetch');
-const download = require('download');
+const fetch = require('node-fetch').default;
 const signException = require('./SignException');
 const SignException = signException.SignException;
 const fs = require('fs');
@@ -10,9 +9,10 @@ const oauth = require('./Oauth');
 const DC_type = oauth.DC_type;
 const methods = ['GET', 'POST', 'PUT', 'DELETE'];
 
+
 function ApiClient() {
 
-    function callSignAPI(
+    const callSignAPI = (
         currentUser,
         api,
         method,
@@ -21,7 +21,7 @@ function ApiClient() {
         file_path = null,
         authorizedCall = true,
         download = false
-    ) {
+    ) => {
         if (DC_type.includes(currentUser.DC.toLowerCase())) {
             this.DC = currentUser.DC;
         } else {
@@ -33,7 +33,7 @@ function ApiClient() {
         }
         let URL = currentUser.getBaseURL() + api;
         return makeCall(currentUser, URL, method, queryparams, postData, file_path, authorizedCall, download);
-    }
+    };
 
     async function makeCall(
         currentUser,
@@ -52,16 +52,12 @@ function ApiClient() {
                 URL += '&' + new URLSearchParams(queryparams).toString();
             }
         }
-        let access_token = currentUser.getAccessToken();
-        if ((authorizedCall && access_token == '') || access_token === undefined) {
-            let resp = await currentUser.generateAccessTokenUsingRefreshToken();
-            updateAccessToken(accessToken); 
-            throw new SignException('Authorization Missing(Access Token/ Refresh Token)');
-        }
+
+        let access_token = await currentUser.getAccessToken();
 
         let HEADERS = {};
         if (authorizedCall) {
-            HEADERS['Authorization'] = 'Zoho-oauthtoken ' + currentUser.getAccessToken();
+            HEADERS['Authorization'] = 'Zoho-oauthtoken ' + access_token;
         }
 
         let requestOptions = {
@@ -69,6 +65,7 @@ function ApiClient() {
             headers: HEADERS,
             body: postData
         };
+
         return fetch(URL, requestOptions)
             .then((_res) => {
                 if (download) {
