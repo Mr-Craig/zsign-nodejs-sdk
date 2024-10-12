@@ -345,7 +345,7 @@ class ZohoSign{
 	}
 
 	//DOWNLOAD REQUEST
-	static async downloadRequest(request_id,currentUser,filepath, with_coc, is_merged)
+	static async downloadRequest(request_id,currentUser, with_coc, is_merged)
 	{
 		let queryparams="";
 		if(with_coc && is_merged)
@@ -360,43 +360,22 @@ class ZohoSign{
 		{
 			queryparams+="is_merged=true";
 		}
-		let response=await ApiClient.callSignAPI( currentUser,"/api/v1/requests/"+request_id+"/pdf?"+queryparams, 'GET', null,null,filepath,true,true);
-		if(response.status==200)
-		{
-			return true;
-		}
-		else
-		{
-			return response;	
-		}
+		let response=await ApiClient.callSignAPI( currentUser,"/api/v1/requests/"+request_id+"/pdf?"+queryparams, 'GET', null,null,null,true,true);
+		return response;	
 	}
 
 	//DOWNLOAD DOCUMENT FROM PARTICULAR REQUEST
-	static async downloadDocument(request_id,document_id,filepath,currentUser)
+	static async downloadDocument(request_id,document_id,currentUser)
 	{
-		let response = await ApiClient.callSignAPI( currentUser,"/api/v1/requests/"+request_id+"/documents/"+document_id+"/pdf?", 'GET', null,null,filepath,true,true);
-		if(response.status==200)
-		{
-			return true;
-		}
-		else
-		{
-			return response;	
-		}
+		let response = await ApiClient.callSignAPI( currentUser,"/api/v1/requests/"+request_id+"/documents/"+document_id+"/pdf?", 'GET', null,null,null,true,true);
+		return response;	
 	}
 
 	//DOWNLOAD COMPLETION CERTIFICATE OF THE SIGNED REQUEST
-	static async downloadCompletionCertificate(request_id,filepath,currentUser)
+	static async downloadCompletionCertificate(request_id,currentUser)
 	{
-		let response = await ApiClient.callSignAPI( currentUser,"/api/v1/requests/"+request_id+"/completioncertificate", 'GET', null,null,filepath,true,true);
-		if(response.status==200)
-		{
-			return true;
-		}
-		else
-		{
-			return response;	
-		}
+		let response = await ApiClient.callSignAPI( currentUser,"/api/v1/requests/"+request_id+"/completioncertificate", 'GET', null,null,null,true,true);
+		return response;
 	}
 
 	//RECALL REQUEST

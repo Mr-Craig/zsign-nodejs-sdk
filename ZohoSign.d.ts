@@ -8,9 +8,9 @@ export class ZohoSign {
     static getRequestList(category: any, start_index: any, row_count: any, sort_order: string, sort_column: string, currentUser: any): Promise<{}>;
     static generateEmbeddedSigningLink(request_id: any, action_id: any, host: any, currentUser: any): Promise<any>;
     static getFieldDataFromCompletedDocument(request_id: any, currentUser: any): Promise<any>;
-    static downloadRequest(request_id: any, currentUser: any, filepath: any, with_coc: any, is_merged: any): Promise<any>;
-    static downloadDocument(request_id: any, document_id: any, filepath: any, currentUser: any): Promise<any>;
-    static downloadCompletionCertificate(request_id: any, filepath: any, currentUser: any): Promise<any>;
+    static downloadRequest(request_id: any, currentUser: any, with_coc: any, is_merged: any): Promise<any>;
+    static downloadDocument(request_id: any, document_id: any, currentUser: any): Promise<any>;
+    static downloadCompletionCertificate(request_id: any, currentUser: any): Promise<any>;
     static recallRequest(request_id: any, currentUser: any): Promise<any>;
     static remindRequest(request_id: any, currentUser: any): Promise<any>;
     static deleteRequest(request_id: any, currentUser: any, inProgress?: boolean, reason?: any): Promise<any>;

@@ -69,21 +69,7 @@ function ApiClient() {
         return fetch(URL, requestOptions)
             .then((_res) => {
                 if (download) {
-                    let contentDisposition = _res.headers.get('content-disposition');
-                    if (contentDisposition !== null) {
-                        let filename = contentDisposition
-                            .split(';')[1]
-                            .split('=')[1]
-                            .replace(/\"/g, '')
-                            .replace("UTF-8''", '');
-                        let filepath = file_path;
-                        if (!fs.existsSync(filepath + filename)) {
-                            fs.mkdirSync(filepath, { recursive: true });
-                        }
-                        let fileStream = fs.createWriteStream(path.join(filepath, filename));
-                        _res.body.pipe(fileStream);
-                        return _res;
-                    }
+                    return _res;
                 }
                 return _res.json().then((responseJson) => {
                     return validateResponse(_res, responseJson, currentUser, URL, authorizedCall);
